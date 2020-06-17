@@ -22,11 +22,9 @@ function App() {
   }, []);
   async function handleAddRepository() {
     repository.techs = repository.techs.split(',');
-    console.log(repository);
     const response = await api.post('repositories', repository);
     setRepositories([...repositories, response.data]);
     setRepository({ url: '', title: '', techs: '' });
-    console.log(response.data);
   }
 
   async function handleRemoveRepository(id) {
@@ -42,7 +40,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div id="container">
       <ul data-testid="repository-list">
         {repositories.map((repository) => (
           <li key={repository.id}>
@@ -53,28 +51,30 @@ function App() {
           </li>
         ))}
       </ul>
-      <input
-        placeholder="URL do repositorio"
-        onChange={(event) =>
-          setRepository({ ...repository, url: event.target.value })
-        }
-        value={repository.url}
-      />
-      <input
-        placeholder="Titulo do repositorio"
-        onChange={(event) =>
-          setRepository({ ...repository, title: event.target.value })
-        }
-        value={repository.title}
-      />
-      <input
-        placeholder="Tecnologias separadas por virgula."
-        onChange={(event) =>
-          setRepository({ ...repository, techs: event.target.value })
-        }
-        value={repository.techs}
-      />
-      <button onClick={handleAddRepository}>Adicionar</button>
+      <div className="form">
+        <input
+          placeholder="URL do repositorio"
+          onChange={(event) =>
+            setRepository({ ...repository, url: event.target.value })
+          }
+          value={repository.url}
+        />
+        <input
+          placeholder="Titulo do repositorio"
+          onChange={(event) =>
+            setRepository({ ...repository, title: event.target.value })
+          }
+          value={repository.title}
+        />
+        <input
+          placeholder="Tecnologias separadas por virgula."
+          onChange={(event) =>
+            setRepository({ ...repository, techs: event.target.value })
+          }
+          value={repository.techs}
+        />
+        <button onClick={handleAddRepository}>Adicionar</button>
+      </div>
     </div>
   );
 }
