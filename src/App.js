@@ -21,6 +21,8 @@ function App() {
       });
   }, []);
   async function handleAddRepository() {
+    repository.techs = repository.techs.split(',');
+    console.log(repository);
     const response = await api.post('repositories', repository);
     setRepositories([...repositories, response.data]);
     setRepository({ url: '', title: '', techs: '' });
