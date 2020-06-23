@@ -5,6 +5,11 @@ import './styles.css';
 
 function App() {
   const [repositories, setRepositories] = useState([]);
+  const [repository, setRepository] = useState({
+    title: '',
+    url: '',
+    techs: '',
+  });
   useEffect(() => {
     api
       .get('repositories')
@@ -14,9 +19,12 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  });
+  }, []);
   async function handleAddRepository() {
-    // TODO
+    const response = await api.post('repositories', repository);
+    setRepositories([...repositories, response.data]);
+    setRepository({ url: '', title: '', techs: '' });
+    console.log(response.data);
   }
 
   async function handleRemoveRepository(id) {
@@ -27,13 +35,35 @@ function App() {
     <div>
       <ul data-testid="repository-list">
         {repositories.map((repository) => (
-          <li key={repository.id}>{repository.title}</li>
+          <li key={repository.id}>
+            {repository.title}
+            <button onClick={() => handleRemoveRepository(repository.id)}>
+              Remover
+            </button>
+          </li>
         ))}
-        <li>
-          <button onClick={() => handleRemoveRepository(1)}>Remover</button>
-        </li>
       </ul>
-
+      <input
+        placeholder="URL do repositorio"
+        onChange={(event) =>
+          setRepository({ ...repository, url: event.target.value })
+        }
+        value={repository.url}
+      />
+      <input
+        placeholder="Titulo do repositorio"
+        onChange={(event) =>
+          setRepository({ ...repository, title: event.target.value })
+        }
+        value={repository.title}
+      />
+      <input
+        placeholder="Tecnologias separadas por virgula."
+        onChange={(event) =>
+          setRepository({ ...repository, techs: event.target.value })
+        }
+        value={repository.techs}
+      />
       <button onClick={handleAddRepository}>Adicionar</button>
     </div>
   );
